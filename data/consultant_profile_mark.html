@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markus Weber - Data Scientist Profile</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #222;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-top: -10px;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .skills-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+
+        .experience-item {
+            margin-bottom: 20px;
+            border-left: 3px solid #e74c3c;
+            padding-left: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="profile-markus-weber">
+        <h1 id="name">Markus Weber</h1>
+        <p class="subtitle" id="role">Lead Data Scientist</p>
+
+        <div class="grid">
+            <div class="sidebar">
+                <h3>Contact</h3>
+                <p><span class="label">Email:</span> <a href="mailto:m.weber@data-insights.de"
+                        id="email">m.weber@data-insights.de</a></p>
+                <p><span class="label">Phone:</span> <span id="phone">+49 30 12345678</span></p>
+                <p><span class="label">Location:</span> <span id="location">Berlin, Germany</span></p>
+
+                <h3>Education</h3>
+                <div id="education">
+                    <p><strong>Ph.D. Statistics</strong><br>Humboldt University (2015)</p>
+                    <p><strong>M.Sc. Mathematics</strong><br>TU Munich (2011)</p>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <h3>About</h3>
+                <p id="bio">Markus is a data scientist with a strong background in predictive modeling and natural
+                    language processing. He has led teams in developing recommendation engines for e-commerce giants.
+                </p>
+
+                <h3>Experience</h3>
+                <div id="experience-list">
+                    <div class="experience-item">
+                        <h4>Senior Data Scientist at E-Shop Global</h4>
+                        <p class="date">2018 - Present</p>
+                        <p>Leading the personalization team, improving conversion rates by 15%.</p>
+                    </div>
+                    <div class="experience-item">
+                        <h4>Data Analyst at FinCorp</h4>
+                        <p class="date">2015 - 2018</p>
+                        <p>Risk modeling and fraud detection using random forests.</p>
+                    </div>
+                </div>
+
+                <h3>Technical Skills</h3>
+                <div class="skills-cloud" id="skills">
+                    <span class="skill-badge">Python</span>
+                    <span class="skill-badge">PyTorch</span>
+                    <span class="skill-badge">SQL</span>
+                    <span class="skill-badge">Docker</span>
+                    <span class="skill-badge">AWS SageMaker</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

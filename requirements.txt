@@ -1,0 +1,10 @@
+networkx
+pydantic
+openai
+jupyter
+pytest
+langgraph
+langchain
+pandas
+python-dotenv
+Faker

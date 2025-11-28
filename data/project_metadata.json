@@ -1,0 +1,45 @@
+{
+  "dataset_version": "1.0",
+  "generated_at": "2024-05-30T10:00:00Z",
+  "projects": [
+    {
+      "id": "PROJ-001",
+      "name": "Alpha Protocol",
+      "status": "Active",
+      "budget": 50000,
+      "currency": "USD",
+      "start_date": "2024-01-15",
+      "end_date": "2024-08-30",
+      "manager": "Alice Chen",
+      "team": ["Bob Jones", "Charlie Day"],
+      "tags": ["crypto", "backend", "high-priority"],
+      "purchase_orders": ["PO-1100-A", "PO-1102-B"]
+    },
+    {
+      "id": "PROJ-002",
+      "name": "Legacy Sunset",
+      "status": "Completed",
+      "budget": 15000,
+      "currency": "EUR",
+      "start_date": "2023-06-01",
+      "end_date": "2023-12-15",
+      "manager": "David Smith",
+      "team": ["Elena Fisher"],
+      "tags": ["maintenance", "migration"],
+      "purchase_orders": ["PO-9921-X"]
+    },
+    {
+      "id": "PROJ-003",
+      "name": "Mobile Revamp",
+      "status": "Planning",
+      "budget": 75000,
+      "currency": "USD",
+      "start_date": "2024-09-01",
+      "end_date": "2025-03-31",
+      "manager": "Sarah Jenkins",
+      "team": [],
+      "tags": ["mobile", "frontend", "ux"],
+      "purchase_orders": []
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+    "vendors": [
+        {
+            "vendor_id": "V-100",
+            "name": "Cloud Services Inc.",
+            "contact_person": "Michael Scott",
+            "email": "mscott@cloudservices.com",
+            "services": [
+                "Hosting",
+                "CDN",
+                "DNS"
+            ],
+            "rating": 4.8,
+            "active_contracts": true
+        },
+        {
+            "vendor_id": "V-101",
+            "name": "SecureNet Solutions",
+            "contact_person": "Pam Beesly",
+            "email": "pam@securenet.com",
+            "services": [
+                "Penetration Testing",
+                "Audit"
+            ],
+            "rating": 4.5,
+            "active_contracts": false
+        },
+        {
+            "vendor_id": "V-102",
+            "name": "DevTools Corp",
+            "contact_person": "Jim Halpert",
+            "email": "jim@devtools.com",
+            "services": [
+                "CI/CD Pipeline",
+                "Code Analysis"
+            ],
+            "rating": 4.9,
+            "active_contracts": true
+        }
+    ],
+    "last_updated": "2024-05-28"
+}
