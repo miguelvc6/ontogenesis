@@ -2,7 +2,7 @@ import os
 from typing import Optional
 from openai import OpenAI
 from .base import LLMProvider
-from ...utils.tracer import tracer
+from utils.tracer import tracer
 
 class OpenAIProvider(LLMProvider):
     """Concrete implementation for OpenAI API."""

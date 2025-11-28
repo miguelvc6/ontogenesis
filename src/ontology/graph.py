@@ -1,9 +1,10 @@
 from typing import List, Dict, Any
+import os
 import networkx as nx
 import matplotlib.pyplot as plt
 from .types import DataType
 from .tools import Tool
-from ..utils.tracer import tracer
+from utils.tracer import tracer
 
 class CapabilityGraph:
     def __init__(self):
@@ -71,3 +72,54 @@ class CapabilityGraph:
         except Exception as e:
             tracer.end_span(error=str(e))
             print(f"Visualization failed: {e}")
+
+    def save_to_json(self, path: str):
+        """Saves the graph state to a JSON file."""
+        tracer.start_span("save_graph", {"path": path})
+        data = {
+            "nodes": [],
+            "edges": []
+        }
+        
+        for node, attrs in self.graph.nodes(data=True):
+            data["nodes"].append({
+                "name": node,
+                "schema": attrs.get("schema", {})
+            })
+            
+        for u, v, attrs in self.graph.edges(data=True):
+            if "tool" in attrs:
+                tool: Tool = attrs["tool"]
+                data["edges"].append({
+                    "source": u,
+                    "target": v,
+                    "tool": tool.model_dump()
+                })
+        
+        import json
+        with open(path, "w") as f:
+            json.dump(data, f, indent=2)
+        tracer.end_span(outputs="Graph saved to JSON")
+
+    def load_from_json(self, path: str):
+        """Loads the graph state from a JSON file."""
+        tracer.start_span("load_graph", {"path": path})
+        import json
+        if not os.path.exists(path):
+            tracer.end_span(error="File not found")
+            return
+
+        with open(path, "r") as f:
+            data = json.load(f)
+            
+        self.graph.clear()
+        
+        for node_data in data["nodes"]:
+            self.add_type(DataType(name=node_data["name"], schema_def=node_data["schema"]))
+            
+        for edge_data in data["edges"]:
+            tool_data = edge_data["tool"]
+            tool = Tool(**tool_data)
+            self.add_tool(tool)
+            
+        tracer.end_span(outputs="Graph loaded from JSON")
