@@ -13,6 +13,9 @@ Lifelong Capability Learning via Neuro-Symbolic Tool Synthesis.
 - `notebooks/`: Jupyter notebooks for experiments.
 - `data/`: Sample data for testing.
 - `docs/`: Project documentation.
+    - [Codebase Overview](docs/codebase_overview.md)
+    - [v0 Results](docs/v0_results.md)
+    - [Implementation Plan](docs/implementation_plan.md)
 
 ## Setup
 

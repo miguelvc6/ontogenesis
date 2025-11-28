@@ -11,6 +11,7 @@ We will proceed in three versions:
 ### **Version 0: The Logic Probe**
 
 **Goal:** Validate that "Gap Detection via Types" actually produces better synthesis prompts than standard "ReAct" reasoning. No complex infrastructure yet.
+**Status:** [COMPLETED] - See `docs/v0_results.md`.
 
 **Tech Stack:** `NetworkX` (Graph), `Pydantic` (Type Definitions), `OpenAI API` (LLM), `Jupyter Notebook`.
 

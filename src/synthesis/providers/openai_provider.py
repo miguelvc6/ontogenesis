@@ -2,6 +2,7 @@ import os
 from typing import Optional
 from openai import OpenAI
 from .base import LLMProvider
+from ...utils.tracer import tracer
 
 class OpenAIProvider(LLMProvider):
     """Concrete implementation for OpenAI API."""
@@ -14,14 +15,22 @@ class OpenAIProvider(LLMProvider):
         self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o")
 
     def generate(self, prompt: str, system_prompt: Optional[str] = None, **kwargs) -> str:
+        tracer.start_span("llm_generate", {"provider": "openai", "model": self.model, "prompt_length": len(prompt)})
+        
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
 
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            **kwargs
-        )
-        return response.choices[0].message.content
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                **kwargs
+            )
+            content = response.choices[0].message.content
+            tracer.end_span(outputs={"response_length": len(content)})
+            return content
+        except Exception as e:
+            tracer.end_span(error=str(e))
+            raise e

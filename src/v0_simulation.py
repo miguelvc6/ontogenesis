@@ -10,9 +10,11 @@ from src.ontology.graph import CapabilityGraph
 from src.ontology.types import DataType
 from src.synthesis.factory import LLMFactory
 from src.utils.code_parsing import extract_code_block
+from src.utils.tracer import tracer
 
 def main():
     load_dotenv()
+    tracer.start_trace()
     print("=== OntoGenesis v0: Logic Probe Simulation ===\n")
 
     # 1. Initialize Graph
@@ -89,6 +91,10 @@ def main():
     print("    - Added Type: KGTriples (Goal)")
 
     print("\n[2] Defined Ontology Types.")
+    
+    # Visualize initial state
+    print("    - Visualizing Ontology Graph...")
+    graph.visualize("ontology_initial.png")
 
     # 3. Define a Task and Run Gap Detection
     print("\n[3] Scenario: Extract Knowledge Graph from Consultant Profile (HTML)")
@@ -121,6 +127,7 @@ Write a Python function `transform(input_data: str) -> List[Dict[str, str]]` tha
 The input is the raw HTML string.
 The output must be a list of dictionaries, each with 'subject', 'predicate', 'object' keys.
 Use BeautifulSoup to parse the HTML.
+Use the following predicates: 'hasName', 'hasRole', 'hasEmail', 'hasPhone'.
 Ensure the output strictly adheres to the target schema.
 Return ONLY the python code, wrapped in a markdown code block.
 """
