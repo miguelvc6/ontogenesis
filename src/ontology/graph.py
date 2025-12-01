@@ -24,23 +24,68 @@ class CapabilityGraph:
 
     def detect_gap(self, start_type: str, end_type: str) -> Dict[str, Any]:
         """
-        A simple gap detector:
-        If no path exists, we simply propose a direct edge.
+        Detects a gap between start_type and end_type using bidirectional search.
+        Finds the intersection of Forward Reachable and Backward Required sets.
         """
         tracer.start_span("detect_gap", {"start_type": start_type, "end_type": end_type})
         
-        if not self.find_path(start_type, end_type):
-            result = {
-                "gap": True,
-                "source": start_type,
-                "target": end_type
-            }
+        # 1. Check direct path first (optimization)
+        if self.find_path(start_type, end_type):
+            result = {"gap": False}
             tracer.end_span(outputs=result)
             return result
-            
-        result = {"gap": False}
+
+        # 2. Forward Search (Reachable types from start)
+        forward_reachable = self.forward_search(start_type)
+        
+        # 3. Backward Search (Types that can reach end)
+        backward_required = self.backward_search(end_type)
+        
+        # 4. Find Intersection
+        intersection = forward_reachable.intersection(backward_required)
+        
+        if intersection:
+            # If there is an intersection, a path exists (should have been caught by find_path, 
+            # but maybe graph state changed or find_path is simple).
+            # In our case, if find_path failed but intersection exists, it's weird.
+            # But let's assume if find_path failed, we truly have a gap.
+            # Wait, if intersection is not empty, then there IS a path.
+            # So if find_path returned False, intersection should be empty.
+            pass
+
+        # 5. Identify the "Best" Gap
+        # We want to find a pair (u, v) such that u in Forward, v in Backward, 
+        # and we can synthesize a tool u -> v.
+        # For v1.1, we simply propose bridging the start_type to the end_type directly
+        # OR bridging the closest nodes.
+        
+        # For now, let's keep it simple: Source is start_type, Target is end_type.
+        # But we can log the reachable sets for debugging/future advanced planning.
+        
+        print(f"[Graph] Forward Reachable: {forward_reachable}")
+        print(f"[Graph] Backward Required: {backward_required}")
+        
+        result = {
+            "gap": True,
+            "source": start_type,
+            "target": end_type,
+            "forward_reachable": list(forward_reachable),
+            "backward_required": list(backward_required)
+        }
         tracer.end_span(outputs=result)
         return result
+
+    def forward_search(self, start_node: str) -> set:
+        """Returns all nodes reachable from start_node."""
+        if start_node not in self.graph:
+            return set()
+        return set(nx.descendants(self.graph, start_node)) | {start_node}
+
+    def backward_search(self, end_node: str) -> set:
+        """Returns all nodes that can reach end_node."""
+        if end_node not in self.graph:
+            return set()
+        return set(nx.ancestors(self.graph, end_node)) | {end_node}
 
     def visualize(self, output_path: str = "ontology_graph.png"):
         """

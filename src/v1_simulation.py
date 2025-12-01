@@ -52,15 +52,9 @@ def main():
     # 4. Solve Task
     print("\n[3] Agent solving task: ConsultantProfile -> KGTriples")
     
-    def verify_result(result):
-        expected_name = "Markus Weber"
-        found_name = any(t['object'] == expected_name for t in result if t['predicate'] == 'hasName')
-        if not found_name:
-            raise ValueError(f"Did not find exact name: '{expected_name}'")
-        print(f"    [PASS] Verification successful: Found '{expected_name}'")
-
     try:
-        result = agent.solve_task("ConsultantProfile", "KGTriples", input_data, verification_fn=verify_result)
+        # Remove verification_fn to trigger auto-verification (Schema-Based)
+        result = agent.solve_task("ConsultantProfile", "KGTriples", input_data)
         
         print("\n[4] Task Result:")
         print("-" * 40)

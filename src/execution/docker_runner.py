@@ -112,3 +112,82 @@ if __name__ == "__main__":
             except Exception as e:
                 tracer.end_span(error=str(e))
                 raise RuntimeError(f"Docker execution failed: {e}")
+
+    def verify_result(self, result: Any, test_code: str) -> bool:
+        """
+        Verifies the result using the provided pytest code.
+        """
+        tracer.start_span("verify_result_docker", {"image": self.image})
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # 1. Write Result
+            with open(os.path.join(temp_dir, "result.json"), "w", encoding="utf-8") as f:
+                json.dump(result, f)
+                
+            # 2. Write Test Code
+            with open(os.path.join(temp_dir, "test_generated.py"), "w", encoding="utf-8") as f:
+                f.write(test_code)
+                
+            # 3. Run Pytest
+            try:
+                # Install pytest if needed (slow, but robust)
+                command = "sh -c 'pip install pytest > /dev/null 2>&1 && pytest /app/test_generated.py'"
+                
+                # Run and capture output
+                logs = self.client.containers.run(
+                    self.image,
+                    command=command,
+                    volumes={temp_dir: {'bind': '/app', 'mode': 'rw'}},
+                    working_dir='/app',
+                    remove=True,
+                    stderr=True,
+                    stdout=True
+                )
+                
+                tracer.end_span(outputs="Verification passed")
+                return True
+                
+            except docker.errors.ContainerError as e:
+                # Pytest failed (exit code 1)
+                # Capture both stdout (logs) and stderr
+                # Note: 'e.container' might be gone if remove=True? 
+                # Actually, e.stderr contains stderr. e.stdout? 
+                # The 'logs' variable above is not assigned if exception is raised.
+                # But ContainerError has a 'stderr' attribute. Does it have stdout?
+                # It seems ContainerError usually only has stderr if we asked for it?
+                # Let's try to be safer.
+                
+                # Wait, if I use detach=False (default), it returns logs.
+                # If it fails, it raises ContainerError.
+                # ContainerError has 'container', 'exit_status', 'command', 'image', 'stderr'.
+                # It does NOT seem to have stdout easily accessible if it's mixed?
+                # Actually, if I don't redirect stdout to /dev/null, it should be in the output.
+                
+                # Let's try to capture output manually by not using 'run' helper if possible?
+                # Or just trust that stderr might contain it if configured?
+                # Pytest prints to stdout.
+                
+                # Better approach: Run the container with detach=True, wait, then get logs.
+                container = self.client.containers.run(
+                    self.image,
+                    command=command,
+                    volumes={temp_dir: {'bind': '/app', 'mode': 'rw'}},
+                    working_dir='/app',
+                    detach=True,
+                    stderr=True,
+                    stdout=True
+                )
+                
+                result = container.wait()
+                logs = container.logs().decode("utf-8")
+                container.remove()
+                
+                if result["StatusCode"] != 0:
+                    tracer.end_span(error=f"Verification failed: {logs}")
+                    raise RuntimeError(f"Verification failed: {logs}")
+                
+                tracer.end_span(outputs="Verification passed")
+                return True
+            except Exception as e:
+                tracer.end_span(error=str(e))
+                raise RuntimeError(f"Docker verification failed: {e}")

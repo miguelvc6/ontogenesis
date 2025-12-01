@@ -10,11 +10,13 @@ from execution.runner import CodeRunner
 from execution.docker_runner import DockerRunner
 from utils.code_parsing import extract_code_block
 from utils.tracer import tracer
+from synthesis.test_generator import TestGenerator
 
 class OntoGenesisAgent:
     def __init__(self, llm_provider: str = "openai", model: Optional[str] = None, execution_mode: str = "local"):
         self.graph = CapabilityGraph()
         self.llm_provider = LLMFactory.create_provider(llm_provider, model=model)
+        self.test_generator = TestGenerator()
         
         if execution_mode == "docker":
             self.runner = DockerRunner()
@@ -73,8 +75,13 @@ class OntoGenesisAgent:
                 
                 # Verify
                 if verification_fn:
-                    print("[Agent] Verifying result...")
+                    print("[Agent] Verifying result (User Provided)...")
                     verification_fn(result) # Should raise exception on failure
+                elif isinstance(self.runner, DockerRunner):
+                    print("[Agent] Verifying result (Schema-Based)...")
+                    target_schema = self.graph.graph.nodes[target_type]['schema']
+                    test_code = self.test_generator.generate_test_code(target_type, target_schema)
+                    self.runner.verify_result(result, test_code)
                 
                 # Success!
                 tracer.end_span(outputs="Task completed")

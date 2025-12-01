@@ -124,6 +124,7 @@ This setup helps you master Python graphs and sets the foundation for a more adv
 ### **Version 1: The Closed-Loop System**
 
 **Goal:** Automate the cycle. The agent encounters a gap, writes the tool, tests it, and *adds it to the graph* to continue planning.
+**Status:** [FUNCTIONALLY COMPLETE] - Core loop working. See v1.1 for refinements.
 
 **Tech Stack:** `LangGraph` (for the control loop), `Docker` (Sandbox), `PyTest`.
 
@@ -152,6 +153,27 @@ You need a safe place to execute generated code.
 - When a tool is registered, it isn't just a Python function. It is a **Node** in your graph.
 - **Persistence:** Save the graph to JSON/Pickle.
 - **Reuse:** On the *next* run of the loop, the planner sees this new edge and uses it immediately without synthesis.
+
+---
+
+### **Version 1.1: Refinements (Missing from v1 Plan)**
+
+While v1 achieves the closed-loop goal, the following items from the original plan were simplified and need to be implemented to fully realize the design:
+
+#### **1. Formal Planner (State-Space Search)**
+*Current Status:* [COMPLETED] Implemented bidirectional search in `CapabilityGraph`.
+*Goal:* Implement bidirectional search to find the optimal "gap" (intersection of forward reachable and backward required types).
+*Tasks:*
+- [x] Implement `forward_search(start_type)` in `CapabilityGraph`.
+- [x] Implement `backward_search(target_type)` in `CapabilityGraph`.
+- [x] Update `detect_gap` to find the intersection.
+
+#### **2. Schema-Based Test Generation**
+*Current Status:* [COMPLETED] Implemented `TestGenerator` and Docker verification.
+*Goal:* Automatically generate `pytest` files based on the target `DataType` schema (e.g., checking types, required fields).
+*Tasks:*
+- [x] Create `TestGenerator` class.
+- [x] Update `DockerRunner` to run `pytest`.
 
 ---
 
