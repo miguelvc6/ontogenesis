@@ -11,7 +11,7 @@ class Tracer:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(Tracer, cls).__new__(cls)
-            cls._instance.trace_file = os.path.join(os.path.dirname(__file__), "..", "..", "data", "traces.jsonl")
+            cls._instance.trace_file = os.path.join(os.path.dirname(__file__), "..", "..", "logs", "traces.jsonl")
             # Ensure data directory exists
             os.makedirs(os.path.dirname(cls._instance.trace_file), exist_ok=True)
             cls._instance.current_trace_id = str(uuid.uuid4())

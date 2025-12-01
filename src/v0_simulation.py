@@ -94,7 +94,7 @@ def main():
     
     # Visualize initial state
     print("    - Visualizing Ontology Graph...")
-    graph.visualize("ontology_initial.png")
+    graph.visualize("logs/ontology_initial.png")
 
     # 3. Define a Task and Run Gap Detection
     print("\n[3] Scenario: Extract Knowledge Graph from Consultant Profile (HTML)")
