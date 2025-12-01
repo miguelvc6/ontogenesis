@@ -149,23 +149,8 @@ if __name__ == "__main__":
                 
             except docker.errors.ContainerError as e:
                 # Pytest failed (exit code 1)
-                # Capture both stdout (logs) and stderr
-                # Note: 'e.container' might be gone if remove=True? 
-                # Actually, e.stderr contains stderr. e.stdout? 
-                # The 'logs' variable above is not assigned if exception is raised.
-                # But ContainerError has a 'stderr' attribute. Does it have stdout?
-                # It seems ContainerError usually only has stderr if we asked for it?
-                # Let's try to be safer.
-                
-                # Wait, if I use detach=False (default), it returns logs.
-                # If it fails, it raises ContainerError.
-                # ContainerError has 'container', 'exit_status', 'command', 'image', 'stderr'.
-                # It does NOT seem to have stdout easily accessible if it's mixed?
-                # Actually, if I don't redirect stdout to /dev/null, it should be in the output.
-                
-                # Let's try to capture output manually by not using 'run' helper if possible?
-                # Or just trust that stderr might contain it if configured?
-                # Pytest prints to stdout.
+                # Pytest failed (exit code 1)
+                # Capture output manually by running detached container
                 
                 # Better approach: Run the container with detach=True, wait, then get logs.
                 container = self.client.containers.run(

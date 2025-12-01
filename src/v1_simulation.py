@@ -42,6 +42,10 @@ def main():
     }
     agent.register_type("KGTriples", kg_triples_schema)
     print("    - Registered Type: KGTriples")
+    
+    # Visualize initial state
+    print("    - Visualizing Ontology Graph...")
+    agent.graph.visualize("logs/ontology_v1_initial.png")
 
     # 3. Load Input Data
     sample_file = os.path.join(os.path.dirname(__file__), "..", "data", "consultant_profile_mark.html")

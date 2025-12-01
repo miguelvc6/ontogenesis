@@ -44,23 +44,8 @@ class CapabilityGraph:
         # 4. Find Intersection
         intersection = forward_reachable.intersection(backward_required)
         
-        if intersection:
-            # If there is an intersection, a path exists (should have been caught by find_path, 
-            # but maybe graph state changed or find_path is simple).
-            # In our case, if find_path failed but intersection exists, it's weird.
-            # But let's assume if find_path failed, we truly have a gap.
-            # Wait, if intersection is not empty, then there IS a path.
-            # So if find_path returned False, intersection should be empty.
-            pass
-
         # 5. Identify the "Best" Gap
-        # We want to find a pair (u, v) such that u in Forward, v in Backward, 
-        # and we can synthesize a tool u -> v.
-        # For v1.1, we simply propose bridging the start_type to the end_type directly
-        # OR bridging the closest nodes.
-        
-        # For now, let's keep it simple: Source is start_type, Target is end_type.
-        # But we can log the reachable sets for debugging/future advanced planning.
+        # For v1.1, we simply propose bridging the start_type to the end_type directly.
         
         print(f"[Graph] Forward Reachable: {forward_reachable}")
         print(f"[Graph] Backward Required: {backward_required}")
