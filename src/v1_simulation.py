@@ -15,8 +15,8 @@ def main():
     print("=== OntoGenesis v1: Closed-Loop System (Simulation) ===\n")
 
     # 1. Initialize Agent
-    agent = OntoGenesisAgent(llm_provider="openai")
-    print("[1] Initialized OntoGenesisAgent.")
+    agent = OntoGenesisAgent(llm_provider="openai", execution_mode="docker")
+    print("[1] Initialized OntoGenesisAgent (Docker Mode).")
 
     # 2. Register Types
     # Type 1: Consultant Profile (HTML)
@@ -51,23 +51,21 @@ def main():
 
     # 4. Solve Task
     print("\n[3] Agent solving task: ConsultantProfile -> KGTriples")
+    
+    def verify_result(result):
+        expected_name = "Markus Weber"
+        found_name = any(t['object'] == expected_name for t in result if t['predicate'] == 'hasName')
+        if not found_name:
+            raise ValueError(f"Did not find exact name: '{expected_name}'")
+        print(f"    [PASS] Verification successful: Found '{expected_name}'")
+
     try:
-        result = agent.solve_task("ConsultantProfile", "KGTriples", input_data)
+        result = agent.solve_task("ConsultantProfile", "KGTriples", input_data, verification_fn=verify_result)
         
         print("\n[4] Task Result:")
         print("-" * 40)
         print(json.dumps(result, indent=2))
         print("-" * 40)
-        
-        # Basic Verification
-        print("\n[5] Verifying Result...")
-        expected_name = "Markus Weber"
-        found_name = any(t['object'] == expected_name for t in result if t['predicate'] == 'hasName')
-        
-        if found_name:
-            print(f"    [PASS] Found expected name: {expected_name}")
-        else:
-            print(f"    [FAIL] Did not find name: {expected_name}")
             
     except Exception as e:
         print(f"\n[ERROR] Agent failed: {e}")

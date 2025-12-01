@@ -72,19 +72,3 @@ Comparing **OntoGenesis** against **State-of-the-Art (SOTA)** baselines.
    * "The Graph Advantage": Show that planning over types reduces LLM token consumption and error rates compared to ReAct.
    * "Lifelong Learning": Show performance improving over time as the graph densifies.
 5. **Conclusion:** The future of Hybrid AI is agents that curate their own semantic memory.
-
----
-
-### Immediate Next Steps (Actionable)
-
-Do not start by building the whole MCP infrastructure. It is overkill for the *hypothesis*.
-
-1. **Define the Micro-Ontology:** Write a minimal OWL/RDF schema or Python Class hierarchy defining: `File`, `Table`, `Text`, `Graph`.
-2. **Build the "Gap Detector":** Write a script that takes (InputType, OutputType) and runs a NetworkX shortest path. If no path, it outputs the missing signature.
-3. **Manual Simulation:** Take a specific task (e.g., "PDF to KG").
-   * Run the gap detector.
-   * Manually paste the resulting prompt into ChatGPT.
-   * Manually validate the code.
-   * **Goal:** See if the *Logic* (Gap Detection) actually produces useful specs.
-
-**Would you like to define the formal set of "Data Types" and "Capabilities" for this initial micro-ontology right now?**

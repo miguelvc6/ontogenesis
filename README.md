@@ -15,6 +15,7 @@ Lifelong Capability Learning via Neuro-Symbolic Tool Synthesis.
 - `docs/`: Project documentation.
     - [Codebase Overview](docs/codebase_overview.md)
     - [v0 Results](docs/v0_results.md)
+    - [v1 Results](docs/v1_results.md)
     - [Implementation Plan](docs/implementation_plan.md)
 
 ## Setup
